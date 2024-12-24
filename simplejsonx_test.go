@@ -23,7 +23,7 @@ func TestLoad_InvalidJSON(t *testing.T) {
 
 	simpleJson, err := simplejsonx.Load(data)
 	require.Error(t, err)
-	require.Nil(t, simpleJson)
+	require.NotNil(t, simpleJson)
 }
 
 func TestLoad_EmptyInput(t *testing.T) {
@@ -31,7 +31,7 @@ func TestLoad_EmptyInput(t *testing.T) {
 
 	simpleJson, err := simplejsonx.Load(data)
 	require.Error(t, err)
-	require.Nil(t, simpleJson)
+	require.NotNil(t, simpleJson)
 }
 
 func TestWrap(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 func Load(data []byte) (simpleJson *simplejson.Json, err error) {
 	simpleJson, err = simplejson.NewJson(data)
 	if err != nil {
-		return nil, errors.WithMessage(err, "unable to parse JSON")
+		return simplejson.New(), errors.WithMessage(err, "unable to parse JSON")
 	}
 	return simpleJson, nil
 }
