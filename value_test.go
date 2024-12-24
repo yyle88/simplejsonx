@@ -9,21 +9,52 @@ import (
 	"github.com/yyle88/simplejsonx"
 )
 
-func TestResolve_Int(t *testing.T) {
-	simpleJson, err := simplejsonx.Load([]byte(`{"age": 18}`))
-	require.NoError(t, err)
-
-	res, err := simplejsonx.Resolve[int](simpleJson.Get("age"))
-	require.NoError(t, err)
-	t.Log(res)
-	require.Equal(t, 18, res)
-}
-
 func TestExtract_Int(t *testing.T) {
 	simpleJson, err := simplejsonx.Load([]byte(`{"age": 18}`))
 	require.NoError(t, err)
 
 	res, err := simplejsonx.Extract[int](simpleJson, "age")
+	require.NoError(t, err)
+	t.Log(res)
+	require.Equal(t, 18, res)
+}
+
+func TestExtract_Mismatch(t *testing.T) {
+	simpleJson, err := simplejsonx.Load([]byte(`{"name": "yyle88"}`))
+	require.NoError(t, err)
+
+	res, err := simplejsonx.Extract[int](simpleJson, "age")
+	require.Error(t, err)
+	t.Log(err)
+	t.Log(res)
+	require.Equal(t, 0, res)
+}
+
+func TestInspect(t *testing.T) {
+	simpleJson, err := simplejsonx.Load([]byte(`{"age": 18}`))
+	require.NoError(t, err)
+
+	res, err := simplejsonx.Inspect[int](simpleJson, "age")
+	require.NoError(t, err)
+	t.Log(res)
+	require.Equal(t, 18, res)
+}
+
+func TestInspect_Mismatch(t *testing.T) {
+	simpleJson, err := simplejsonx.Load([]byte(`{"name": "yyle88"}`))
+	require.NoError(t, err)
+
+	res, err := simplejsonx.Inspect[int](simpleJson, "age")
+	require.NoError(t, err)
+	t.Log(res)
+	require.Equal(t, 0, res)
+}
+
+func TestResolve_Int(t *testing.T) {
+	simpleJson, err := simplejsonx.Load([]byte(`{"age": 18}`))
+	require.NoError(t, err)
+
+	res, err := simplejsonx.Resolve[int](simpleJson.Get("age"))
 	require.NoError(t, err)
 	t.Log(res)
 	require.Equal(t, 18, res)

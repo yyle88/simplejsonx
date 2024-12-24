@@ -20,3 +20,12 @@ func Wrap(value interface{}) (simpleJson *simplejson.Json) {
 	simpleJson.SetPath([]string{}, value)
 	return simpleJson
 }
+
+// List converts a slice of items into a slice of simplejson.Json objects.
+func List(items []interface{}) (elements []*simplejson.Json) {
+	elements = make([]*simplejson.Json, 0, len(items))
+	for _, item := range items {
+		elements = append(elements, Wrap(item))
+	}
+	return elements
+}

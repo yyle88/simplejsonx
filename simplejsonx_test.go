@@ -74,3 +74,30 @@ func TestWrap_InvalidNone(t *testing.T) {
 		require.Equal(t, "", res)
 	}
 }
+
+func TestList(t *testing.T) {
+	data := []byte(`{
+	"infos": [
+		{"code":1, "name":"a"},
+		{"code":2, "name":"b"},
+		{"code":3, "name":"c"}
+	],
+	"ranks": ["x", "y", "z"]
+}`)
+	simpleJson, err := simplejsonx.Load(data)
+	require.NoError(t, err)
+	infos, err := simpleJson.Get("infos").Array()
+	require.NoError(t, err)
+	elements := simplejsonx.List(infos)
+
+	var resMap = map[string]int{}
+	for _, elem := range elements {
+		code, err := elem.Get("code").Int()
+		require.NoError(t, err)
+		name, err := elem.Get("name").String()
+		require.NoError(t, err)
+		t.Log(code, name)
+		resMap[name] = code
+	}
+	require.Equal(t, map[string]int{"a": 1, "b": 2, "c": 3}, resMap)
+}

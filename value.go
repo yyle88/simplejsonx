@@ -14,6 +14,18 @@ func Extract[T any](simpleJson *simplejson.Json, key string) (T, error) {
 	return Resolve[T](simpleJson.Get(key))
 }
 
+// Inspect retrieves the value of the given key if it exists in the JSON object, returning the zero value if the key is missing.
+func Inspect[T any](simpleJson *simplejson.Json, key string) (T, error) {
+	if simpleJson == nil {
+		return tern.Zero[T](), errors.New("parameter simpleJson is missing")
+	}
+	value, exist := simpleJson.CheckGet(key)
+	if !exist {
+		return tern.Zero[T](), nil
+	}
+	return Resolve[T](value)
+}
+
 /*
 Resolve extracts the value from the provided JSON and convert it to typed value.
 Supports the following functions:

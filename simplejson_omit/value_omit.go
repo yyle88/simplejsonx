@@ -12,6 +12,12 @@ func Extract[T any](simpleJson *simplejson.Json, key string) T {
 	return res0
 }
 
+func Inspect[T any](simpleJson *simplejson.Json, key string) T {
+	res0, err := simplejsonx.Inspect[T](simpleJson, key)
+	sure.Omit(err)
+	return res0
+}
+
 func Resolve[T any](simpleJson *simplejson.Json) T {
 	res0, err := simplejsonx.Resolve[T](simpleJson)
 	sure.Omit(err)
