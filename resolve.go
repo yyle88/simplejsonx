@@ -110,3 +110,12 @@ func Resolve[T any](simpleJson *simplejson.Json) (T, error) {
 		return zero, errors.Errorf("unsupported generic type: %T. unable to resolve JSON value.", zero)
 	}
 }
+
+// GetList retrieves a slice of simplejson.Json objects from the key's list (a[key]).
+func GetList(simpleJson *simplejson.Json, key string) (simpleJsons []*simplejson.Json, err error) {
+	elements, err := simpleJson.Get(key).Array()
+	if err != nil {
+		return simpleJsons, errors.WithMessage(err, "unable to get list")
+	}
+	return List(elements), nil
+}

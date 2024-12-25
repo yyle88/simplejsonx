@@ -17,7 +17,7 @@ func Wrap(value interface{}) (simpleJson *simplejson.Json) {
 	return simpleJson
 }
 
-func List(items []interface{}) (elements []*simplejson.Json) {
-	elements = simplejsonx.List(items)
-	return elements
+func List(elements []interface{}) (simpleJsons []*simplejson.Json) {
+	simpleJsons = simplejsonx.List(elements)
+	return simpleJsons
 }

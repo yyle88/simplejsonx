@@ -23,3 +23,9 @@ func Resolve[T any](simpleJson *simplejson.Json) T {
 	sure.Soft(err)
 	return res0
 }
+
+func GetList(simpleJson *simplejson.Json, key string) (simpleJsons []*simplejson.Json) {
+	simpleJsons, err := simplejsonx.GetList(simpleJson, key)
+	sure.Soft(err)
+	return simpleJsons
+}

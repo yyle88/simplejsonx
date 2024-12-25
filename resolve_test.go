@@ -238,3 +238,36 @@ func TestResolve_Bytes(t *testing.T) {
 	t.Log(res)
 	require.Equal(t, "abc", string(res))
 }
+
+func TestGetList(t *testing.T) {
+	jsonData := `{
+		"key": [
+			{"name": "item1"},
+			{"name": "item2"},
+			{"name": "item3"}
+		]
+	}`
+
+	simpleJson, err := simplejsonx.Load([]byte(jsonData))
+	require.NoError(t, err)
+
+	{
+		simpleJsons, err := simplejsonx.GetList(simpleJson, "key")
+		require.NoError(t, err)
+		require.Len(t, simpleJsons, 3)
+
+		var names = make([]string, 0, len(simpleJsons))
+		for _, item := range simpleJsons {
+			name, err := simplejsonx.Extract[string](item, "name")
+			require.NoError(t, err)
+			names = append(names, name)
+		}
+		require.Equal(t, []string{"item1", "item2", "item3"}, names)
+	}
+
+	{
+		simpleJsons, err := simplejsonx.GetList(simpleJson, "invalidKey")
+		require.Error(t, err)
+		require.Len(t, simpleJsons, 0)
+	}
+}
