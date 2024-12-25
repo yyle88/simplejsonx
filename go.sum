@@ -27,8 +27,8 @@ github.com/yyle88/formatgo v1.0.21 h1:YPhZf63/f+R1JayJ0Cbnqbc9P/9OJOaYJJpwAhMNdt
 github.com/yyle88/formatgo v1.0.21/go.mod h1:6lkm0Jk3XfDKIMtcUqc01DcLVXcKaLTYIkWbQbsDCzU=
 github.com/yyle88/must v0.0.11 h1:GTDpRMX1wKOkl93C8yQkzKsmrRitmfIdl1cG1siGx38=
 github.com/yyle88/must v0.0.11/go.mod h1:5Ur4BKRx6GuW4gCZNx8Hf+iRS9lVmywSkCpxun/f+Do=
-github.com/yyle88/mutexmap v1.0.8 h1:VntAdXID5wbk211LZEPVK96jQBxIcfVIbQuk9cv3P/8=
-github.com/yyle88/mutexmap v1.0.8/go.mod h1:QUYDuARLPlGj414kHewQ5tt8jkDxQXoai8H3C4Gg+yc=
+github.com/yyle88/mutexmap v1.0.9 h1:g1nfNmsReU/AgcGkLgPEKrBeMThJJBrJuvU7i3DOVC0=
+github.com/yyle88/mutexmap v1.0.9/go.mod h1:QUYDuARLPlGj414kHewQ5tt8jkDxQXoai8H3C4Gg+yc=
 github.com/yyle88/printgo v1.0.1 h1:0lCpq28Tlf0jmYhSIlDQ7A3hAqVYswhBuURLR9xbmsw=
 github.com/yyle88/printgo v1.0.1/go.mod h1:yCvpShGBkKdWX5RO+yum2gLbru9ebc04sVmuzhPKSMw=
 github.com/yyle88/rese v0.0.2 h1:UdD5rc2DASd0RAJ322aptWX49keA7j/dvcJmVyreLqg=
