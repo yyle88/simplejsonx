@@ -1,4 +1,4 @@
-package simplejson_soft
+package simplejsons
 
 import (
 	"github.com/bitly/go-simplejson"

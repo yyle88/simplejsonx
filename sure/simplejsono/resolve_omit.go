@@ -1,4 +1,4 @@
-package simplejson_omit
+package simplejsono
 
 import (
 	"github.com/bitly/go-simplejson"

@@ -15,7 +15,7 @@ func TestGen(t *testing.T) {
 	t.Log(srcRoot)
 	outRoot := runpath.PARENT.Path()
 	t.Log(outRoot)
-	sure_pkg_gen.GenerateSurePackageFiles(t, sure_pkg_gen.NewSurePackageConfig(srcRoot, sure.SOFT, pkgPath).WithOutputRoot(outRoot).WithNewPkgName("simplejson_soft"))
-	sure_pkg_gen.GenerateSurePackageFiles(t, sure_pkg_gen.NewSurePackageConfig(srcRoot, sure.MUST, pkgPath).WithOutputRoot(outRoot).WithNewPkgName("simplejson_must"))
-	sure_pkg_gen.GenerateSurePackageFiles(t, sure_pkg_gen.NewSurePackageConfig(srcRoot, sure.OMIT, pkgPath).WithOutputRoot(outRoot).WithNewPkgName("simplejson_omit"))
+	sure_pkg_gen.GenerateSurePackageFiles(t, sure_pkg_gen.NewSurePackageConfig(srcRoot, sure.SOFT, pkgPath).WithOutputRoot(outRoot).WithNewPkgName("simplejsons"))
+	sure_pkg_gen.GenerateSurePackageFiles(t, sure_pkg_gen.NewSurePackageConfig(srcRoot, sure.MUST, pkgPath).WithOutputRoot(outRoot).WithNewPkgName("simplejsonm"))
+	sure_pkg_gen.GenerateSurePackageFiles(t, sure_pkg_gen.NewSurePackageConfig(srcRoot, sure.OMIT, pkgPath).WithOutputRoot(outRoot).WithNewPkgName("simplejsono"))
 }

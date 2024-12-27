@@ -1,4 +1,4 @@
-package simplejson_must
+package simplejsonm
 
 import (
 	"github.com/bitly/go-simplejson"
