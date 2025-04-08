@@ -29,3 +29,20 @@ func GetList(simpleJson *simplejson.Json, key string) (simpleJsons []*simplejson
 	sure.Must(err)
 	return simpleJsons
 }
+
+func Inquire[T any](simpleJson *simplejson.Json, key string) (T, bool) {
+	res0, res1, err := simplejsonx.Inquire[T](simpleJson, key)
+	sure.Must(err)
+	return res0, res1
+}
+
+func Attempt[T any](simpleJson *simplejson.Json, key string) (T, bool) {
+	res0, res1 := simplejsonx.Attempt[T](simpleJson, key)
+	return res0, res1
+}
+
+func Explore[T any](simpleJson *simplejson.Json, path string) (T, bool) {
+	res0, res1, err := simplejsonx.Explore[T](simpleJson, path)
+	sure.Must(err)
+	return res0, res1
+}

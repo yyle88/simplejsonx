@@ -271,3 +271,105 @@ func TestGetList(t *testing.T) {
 		require.Len(t, simpleJsons, 0)
 	}
 }
+
+func TestInquire(t *testing.T) {
+	// 测试成功场景
+	simpleJson, err := simplejsonx.Load([]byte(`{"age": 18}`))
+	require.NoError(t, err)
+
+	{
+		res, exists, err := simplejsonx.Inquire[int](simpleJson, "age")
+		require.NoError(t, err)
+		require.True(t, exists, "key should exist")
+		t.Log(res)
+		require.Equal(t, 18, res)
+	}
+
+	// 测试键不存在场景
+	{
+		res, exists, err := simplejsonx.Inquire[int](simpleJson, "name")
+		require.NoError(t, err)
+		require.False(t, exists, "key should not exist")
+		t.Log(res)
+		require.Equal(t, 0, res) // 零值
+	}
+
+	// 测试解析失败场景
+	{
+		res, exists, err := simplejsonx.Inquire[string](simpleJson, "age")
+		require.Error(t, err, "should fail to resolve int to string")
+		require.False(t, exists, "should return false on resolve failure")
+		t.Log(res)
+		require.Equal(t, "", res) // 零值
+	}
+}
+
+func TestAttempt(t *testing.T) {
+	// 测试成功场景
+	simpleJson, err := simplejsonx.Load([]byte(`{"age": 18}`))
+	require.NoError(t, err)
+
+	{
+		res, ok := simplejsonx.Attempt[int](simpleJson, "age")
+		require.True(t, ok, "should succeed")
+		t.Log(res)
+		require.Equal(t, 18, res)
+	}
+
+	// 测试键不存在场景
+	{
+		res, ok := simplejsonx.Attempt[int](simpleJson, "name")
+		require.False(t, ok, "should fail due to missing key")
+		t.Log(res)
+		require.Equal(t, 0, res) // 零值
+	}
+
+	// 测试解析失败场景
+	{
+		res, ok := simplejsonx.Attempt[string](simpleJson, "age")
+		require.False(t, ok, "should fail to resolve int to string")
+		t.Log(res)
+		require.Equal(t, "", res) // 零值
+	}
+}
+
+func TestExplore(t *testing.T) {
+	// 测试成功场景（嵌套路径）
+	simpleJson, err := simplejsonx.Load([]byte(`{"user": {"name": "Alice"}}`))
+	require.NoError(t, err)
+
+	{
+		res, exists, err := simplejsonx.Explore[string](simpleJson, "user.name")
+		require.NoError(t, err)
+		require.True(t, exists, "path should exist")
+		t.Log(res)
+		require.Equal(t, "Alice", res)
+	}
+
+	// 测试路径不存在场景
+	{
+		res, exists, err := simplejsonx.Explore[string](simpleJson, "user.address")
+		require.NoError(t, err)
+		require.False(t, exists, "path should not exist")
+		t.Log(res)
+		require.Equal(t, "", res) // 零值
+	}
+
+	// 测试解析失败场景
+	{
+		res, exists, err := simplejsonx.Explore[int](simpleJson, "user.name")
+		require.Error(t, err, "should fail to resolve string to int")
+		require.False(t, exists, "should return false on resolve failure")
+		t.Log(res)
+		require.Equal(t, 0, res) // 零值
+	}
+
+	// 测试空路径场景
+	{
+		res, exists, err := simplejsonx.Explore[int](simpleJson, "")
+		require.Error(t, err, "should fail due to empty path")
+		require.False(t, exists, "should return false for empty path")
+		t.Log(res)
+		require.Equal(t, 0, res) // 零值
+	}
+}
