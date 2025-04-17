@@ -142,6 +142,6 @@ Give me stars. Thank you!!!
 
 ---
 
-## Starring
+## GitHub Stars
 
 [![starring](https://starchart.cc/yyle88/simplejsonx.svg?variant=adaptive)](https://starchart.cc/yyle88/simplejsonx)

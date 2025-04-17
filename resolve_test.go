@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/bitly/go-simplejson"
 	"github.com/stretchr/testify/require"
 	"github.com/yyle88/simplejsonx"
 )
@@ -371,5 +372,36 @@ func TestExplore(t *testing.T) {
 		require.False(t, exists, "should return false for empty path")
 		t.Log(res)
 		require.Equal(t, 0, res) // 零值
+	}
+}
+
+func TestExploreGetJson(t *testing.T) {
+	// 测试成功场景（嵌套路径）
+	simpleJson, err := simplejsonx.Load([]byte(`{"user": {"name": "Alice", "events":[{"eventName":"eat"}, {"eventName":"sleep"}]}}`))
+	require.NoError(t, err)
+	res, ok, err := simplejsonx.Explore[*simplejson.Json](simpleJson, "user")
+	require.NoError(t, err)
+	require.True(t, ok)
+	t.Log(res)
+	elements, err := simplejsonx.GetList(res, "events")
+	require.NoError(t, err)
+	t.Log(len(elements))
+	require.Len(t, elements, 2)
+	for _, item := range elements {
+		t.Log(item)
+	}
+}
+
+func TestExploreGetList(t *testing.T) {
+	// 测试成功场景（嵌套路径）
+	simpleJson, err := simplejsonx.Load([]byte(`{"user": {"name": "Alice", "events":[{"eventName":"eat"}, {"eventName":"sleep"}]}}`))
+	require.NoError(t, err)
+	elements, ok, err := simplejsonx.Explore[[]*simplejson.Json](simpleJson, "user.events")
+	require.NoError(t, err)
+	require.True(t, ok)
+	t.Log(len(elements))
+	require.Len(t, elements, 2)
+	for _, item := range elements {
+		t.Log(item)
 	}
 }

@@ -5,16 +5,16 @@ import (
 
 	"github.com/bitly/go-simplejson"
 	"github.com/pkg/errors"
-	"github.com/yyle88/tern"
+	"github.com/yyle88/simplejsonx/internal/utils"
 )
 
 // Extract retrieves the value associated with the given key in the JSON object and parses it into the specified type.
 func Extract[T any](simpleJson *simplejson.Json, key string) (T, error) {
 	if simpleJson == nil {
-		return tern.Zero[T](), errors.New("parameter simpleJson is missing")
+		return utils.Zero[T](), errors.New("parameter simpleJson is missing")
 	}
 	if key == "" {
-		return tern.Zero[T](), errors.New("parameter key is missing")
+		return utils.Zero[T](), errors.New("parameter key is missing")
 	}
 	return Resolve[T](simpleJson.Get(key))
 }
@@ -22,14 +22,14 @@ func Extract[T any](simpleJson *simplejson.Json, key string) (T, error) {
 // Inspect retrieves the value of the given key from the JSON object if it exists, parsing it into the specified type, or returns the zero value if the key is missing.
 func Inspect[T any](simpleJson *simplejson.Json, key string) (T, error) {
 	if simpleJson == nil {
-		return tern.Zero[T](), errors.New("parameter simpleJson is missing")
+		return utils.Zero[T](), errors.New("parameter simpleJson is missing")
 	}
 	if key == "" {
-		return tern.Zero[T](), errors.New("parameter key is missing")
+		return utils.Zero[T](), errors.New("parameter key is missing")
 	}
 	value, exist := simpleJson.CheckGet(key)
 	if !exist {
-		return tern.Zero[T](), nil
+		return utils.Zero[T](), nil
 	}
 	return Resolve[T](value)
 }
@@ -52,9 +52,9 @@ func (j *Json) Bytes() ([]byte, error)
 // Resolve extracts and converts the value from the provided JSON object into the specified type.
 func Resolve[T any](simpleJson *simplejson.Json) (T, error) {
 	if simpleJson == nil {
-		return tern.Zero[T](), errors.New("parameter simpleJson is missing")
+		return utils.Zero[T](), errors.New("parameter simpleJson is missing")
 	}
-	switch zero := tern.Zero[T](); any(zero).(type) {
+	switch zero := utils.Zero[T](); any(zero).(type) {
 	case int:
 		res, err := simpleJson.Int()
 		if err != nil {
@@ -115,6 +115,14 @@ func Resolve[T any](simpleJson *simplejson.Json) (T, error) {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to []byte")
 		}
 		return any(res).(T), nil
+	case *simplejson.Json:
+		return any(simpleJson).(T), nil
+	case []*simplejson.Json:
+		elements, err := simpleJson.Array()
+		if err != nil {
+			return zero, errors.WithMessage(err, "unable to resolve JSON value to []interface{}")
+		}
+		return any(List(elements)).(T), nil
 	default:
 		return zero, errors.Errorf("unsupported generic type: %T. unable to resolve JSON value.", zero)
 	}
@@ -138,18 +146,18 @@ func GetList(simpleJson *simplejson.Json, key string) (simpleJsons []*simplejson
 // Inquire queries the JSON object for the specified key, returning the parsed value, a boolean indicating success, and an error if resolution fails.
 func Inquire[T any](simpleJson *simplejson.Json, key string) (T, bool, error) {
 	if simpleJson == nil {
-		return tern.Zero[T](), false, errors.New("parameter simpleJson is missing")
+		return utils.Zero[T](), false, errors.New("parameter simpleJson is missing")
 	}
 	if key == "" {
-		return tern.Zero[T](), false, errors.New("parameter key is missing")
+		return utils.Zero[T](), false, errors.New("parameter key is missing")
 	}
 	value, exist := simpleJson.CheckGet(key)
 	if !exist {
-		return tern.Zero[T](), false, nil
+		return utils.Zero[T](), false, nil
 	}
 	res, err := Resolve[T](value)
 	if err != nil {
-		return tern.Zero[T](), false, errors.WithMessage(err, "unable to resolve JSON value")
+		return utils.Zero[T](), false, errors.WithMessage(err, "unable to resolve JSON value")
 	}
 	return res, true, nil
 }
@@ -157,18 +165,18 @@ func Inquire[T any](simpleJson *simplejson.Json, key string) (T, bool, error) {
 // Attempt tries to retrieve and parse the value associated with the given key from the JSON object, returning the parsed value and a boolean indicating success.
 func Attempt[T any](simpleJson *simplejson.Json, key string) (T, bool) {
 	if simpleJson == nil {
-		return tern.Zero[T](), false
+		return utils.Zero[T](), false
 	}
 	if key == "" {
-		return tern.Zero[T](), false
+		return utils.Zero[T](), false
 	}
 	value, exist := simpleJson.CheckGet(key)
 	if !exist {
-		return tern.Zero[T](), false
+		return utils.Zero[T](), false
 	}
 	res, err := Resolve[T](value)
 	if err != nil {
-		return tern.Zero[T](), false
+		return utils.Zero[T](), false
 	}
 	return res, true
 }
@@ -176,22 +184,22 @@ func Attempt[T any](simpleJson *simplejson.Json, key string) (T, bool) {
 // Explore navigates the JSON object using a dot-separated path (e.g., "user.name"), returning the parsed value, a boolean indicating success, and an error if resolution fails.
 func Explore[T any](simpleJson *simplejson.Json, path string) (T, bool, error) {
 	if simpleJson == nil {
-		return tern.Zero[T](), false, errors.New("parameter simpleJson is missing")
+		return utils.Zero[T](), false, errors.New("parameter simpleJson is missing")
 	}
 	if path == "" {
-		return tern.Zero[T](), false, errors.New("parameter path is missing")
+		return utils.Zero[T](), false, errors.New("parameter path is missing")
 	}
 	var value = simpleJson
 	var exist bool
 	for _, key := range strings.Split(path, ".") {
 		value, exist = value.CheckGet(key)
 		if !exist {
-			return tern.Zero[T](), false, nil
+			return utils.Zero[T](), false, nil
 		}
 	}
 	res, err := Resolve[T](value)
 	if err != nil {
-		return tern.Zero[T](), false, errors.WithMessage(err, "unable to resolve JSON value")
+		return utils.Zero[T](), false, errors.WithMessage(err, "unable to resolve JSON value")
 	}
 	return res, true, nil
 }
