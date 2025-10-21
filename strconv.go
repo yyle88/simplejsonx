@@ -8,64 +8,70 @@ import (
 	"github.com/yyle88/simplejsonx/internal/utils"
 )
 
-// Strconv extracts and converts the value from the provided JSON object into the specified type.
-func Strconv[T any](simpleJson *simplejson.Json) (T, error) {
-	if simpleJson == nil {
-		return utils.Zero[T](), errors.New("parameter simpleJson is missing")
+// Strconv extracts JSON value via string bridge and converts to target type
+// Uses two-stage conversion process: JSON → string → target type
+// Handles int, int64, float64, string, uint64, boolean using Go's strconv package
+//
+// Strconv 通过字符串中介提取 JSON 值并转换成目标类型
+// 使用两阶段转换过程：JSON → 字符串 → 目标类型
+// 使用 Go 的 strconv 包处理 int、int64、float64、string、uint64、bool
+func Strconv[T any](object *simplejson.Json) (T, error) {
+	if object == nil {
+		return utils.Zero[T](), errors.New("parameter object is missing")
 	}
 	switch zero := utils.Zero[T](); any(zero).(type) {
 	case int:
-		stv, err := simpleJson.String()
+		stringValue, err := object.String()
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to string")
 		}
-		res, err := strconv.Atoi(stv)
+		res, err := strconv.Atoi(stringValue)
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to convert JSON value to int")
 		}
 		return any(res).(T), nil
 	case int64:
-		stv, err := simpleJson.String()
+		stringValue, err := object.String()
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to string")
 		}
-		res, err := strconv.ParseInt(stv, 10, 64)
+		res, err := strconv.ParseInt(stringValue, 10, 64)
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to convert JSON value to int64")
 		}
 		return any(res).(T), nil
 	case float64:
-		stv, err := simpleJson.String()
+		stringValue, err := object.String()
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to string")
 		}
-		res, err := strconv.ParseFloat(stv, 64)
+		res, err := strconv.ParseFloat(stringValue, 64)
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to convert JSON value to float64")
 		}
 		return any(res).(T), nil
 	case string:
-		stv, err := simpleJson.String()
+		stringValue, err := object.String()
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to string")
 		}
-		return any(stv).(T), nil
+		return any(stringValue).(T), nil
 	case uint64:
-		stv, err := simpleJson.String()
+		stringValue, err := object.String()
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to string")
 		}
-		res, err := strconv.ParseUint(stv, 10, 64)
+		res, err := strconv.ParseUint(stringValue, 10, 64)
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to convert JSON value to uint64")
 		}
 		return any(res).(T), nil
 	case bool:
-		stv, err := simpleJson.String()
+		stringValue, err := object.String()
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to resolve JSON value to string")
 		}
-		res, err := strconv.ParseBool(stv)
+		res, err := strconv.ParseBool(stringValue)
 		if err != nil {
 			return zero, errors.WithMessage(err, "unable to convert JSON value to bool")
 		}

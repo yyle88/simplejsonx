@@ -6,43 +6,43 @@ import (
 	"github.com/yyle88/sure"
 )
 
-func Extract[T any](simpleJson *simplejson.Json, key string) T {
-	res0, err := simplejsonx.Extract[T](simpleJson, key)
+func Extract[T any](object *simplejson.Json, key string) T {
+	res0, err := simplejsonx.Extract[T](object, key)
 	sure.Soft(err)
 	return res0
 }
 
-func Inspect[T any](simpleJson *simplejson.Json, key string) T {
-	res0, err := simplejsonx.Inspect[T](simpleJson, key)
+func Inspect[T any](object *simplejson.Json, key string) T {
+	res0, err := simplejsonx.Inspect[T](object, key)
 	sure.Soft(err)
 	return res0
 }
 
-func Resolve[T any](simpleJson *simplejson.Json) T {
-	res0, err := simplejsonx.Resolve[T](simpleJson)
+func Resolve[T any](object *simplejson.Json) T {
+	res0, err := simplejsonx.Resolve[T](object)
 	sure.Soft(err)
 	return res0
 }
 
-func GetList(simpleJson *simplejson.Json, key string) (simpleJsons []*simplejson.Json) {
-	simpleJsons, err := simplejsonx.GetList(simpleJson, key)
+func GetList(object *simplejson.Json, key string) (objects []*simplejson.Json) {
+	objects, err := simplejsonx.GetList(object, key)
 	sure.Soft(err)
-	return simpleJsons
+	return objects
 }
 
-func Inquire[T any](simpleJson *simplejson.Json, key string) (T, bool) {
-	res0, res1, err := simplejsonx.Inquire[T](simpleJson, key)
+func Inquire[T any](object *simplejson.Json, key string) (T, bool) {
+	res0, res1, err := simplejsonx.Inquire[T](object, key)
 	sure.Soft(err)
 	return res0, res1
 }
 
-func Attempt[T any](simpleJson *simplejson.Json, key string) (T, bool) {
-	res0, res1 := simplejsonx.Attempt[T](simpleJson, key)
+func Attempt[T any](object *simplejson.Json, key string) (T, bool) {
+	res0, res1 := simplejsonx.Attempt[T](object, key)
 	return res0, res1
 }
 
-func Explore[T any](simpleJson *simplejson.Json, path string) (T, bool) {
-	res0, res1, err := simplejsonx.Explore[T](simpleJson, path)
+func Explore[T any](object *simplejson.Json, path string) (T, bool) {
+	res0, res1, err := simplejsonx.Explore[T](object, path)
 	sure.Soft(err)
 	return res0, res1
 }

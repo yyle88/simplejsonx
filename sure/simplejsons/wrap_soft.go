@@ -6,18 +6,18 @@ import (
 	"github.com/yyle88/sure"
 )
 
-func Load(data []byte) (simpleJson *simplejson.Json) {
-	simpleJson, err := simplejsonx.Load(data)
+func Load(data []byte) (object *simplejson.Json) {
+	object, err := simplejsonx.Load(data)
 	sure.Soft(err)
-	return simpleJson
+	return object
 }
 
-func Wrap(value interface{}) (simpleJson *simplejson.Json) {
-	simpleJson = simplejsonx.Wrap(value)
-	return simpleJson
+func Wrap(value interface{}) (object *simplejson.Json) {
+	object = simplejsonx.Wrap(value)
+	return object
 }
 
-func List(elements []interface{}) (simpleJsons []*simplejson.Json) {
-	simpleJsons = simplejsonx.List(elements)
-	return simpleJsons
+func List(elements []interface{}) (objects []*simplejson.Json) {
+	objects = simplejsonx.List(elements)
+	return objects
 }

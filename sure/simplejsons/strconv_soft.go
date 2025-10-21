@@ -6,8 +6,8 @@ import (
 	"github.com/yyle88/sure"
 )
 
-func Strconv[T any](simpleJson *simplejson.Json) T {
-	res0, err := simplejsonx.Strconv[T](simpleJson)
+func Strconv[T any](object *simplejson.Json) T {
+	res0, err := simplejsonx.Strconv[T](object)
 	sure.Soft(err)
 	return res0
 }

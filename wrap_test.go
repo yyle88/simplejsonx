@@ -10,10 +10,10 @@ import (
 func TestLoad_ValidJSON(t *testing.T) {
 	data := []byte(`{"key": "value"}`)
 
-	simpleJson, err := simplejsonx.Load(data)
+	object, err := simplejsonx.Load(data)
 	require.NoError(t, err)
 
-	res, err := simpleJson.Get("key").String()
+	res, err := object.Get("key").String()
 	require.NoError(t, err)
 	require.Equal(t, "value", res)
 }
@@ -21,17 +21,17 @@ func TestLoad_ValidJSON(t *testing.T) {
 func TestLoad_InvalidJSON(t *testing.T) {
 	data := []byte(`invalid message`)
 
-	simpleJson, err := simplejsonx.Load(data)
+	object, err := simplejsonx.Load(data)
 	require.Error(t, err)
-	require.NotNil(t, simpleJson)
+	require.NotNil(t, object)
 }
 
 func TestLoad_EmptyInput(t *testing.T) {
 	data := []byte(``)
 
-	simpleJson, err := simplejsonx.Load(data)
+	object, err := simplejsonx.Load(data)
 	require.Error(t, err)
-	require.NotNil(t, simpleJson)
+	require.NotNil(t, object)
 }
 
 func TestWrap(t *testing.T) {
@@ -39,10 +39,10 @@ func TestWrap(t *testing.T) {
 		"key": "abc",
 	}
 
-	simpleJson := simplejsonx.Wrap(value)
-	require.NotNil(t, simpleJson)
+	object := simplejsonx.Wrap(value)
+	require.NotNil(t, object)
 
-	res, err := simpleJson.Get("key").String()
+	res, err := object.Get("key").String()
 	require.NoError(t, err)
 	require.Equal(t, "abc", res)
 }
@@ -50,26 +50,26 @@ func TestWrap(t *testing.T) {
 func TestWrap_WithPrimitiveValue(t *testing.T) {
 	value := 88
 
-	simpleJson := simplejsonx.Wrap(value)
-	require.NotNil(t, simpleJson)
+	object := simplejsonx.Wrap(value)
+	require.NotNil(t, object)
 
-	res, err := simpleJson.Int()
+	res, err := object.Int()
 	require.NoError(t, err)
 	require.Equal(t, 88, res)
 }
 
 func TestWrap_InvalidNone(t *testing.T) {
-	simpleJson := simplejsonx.Wrap(nil)
-	require.NotNil(t, simpleJson)
+	object := simplejsonx.Wrap(nil)
+	require.NotNil(t, object)
 
 	{
-		res, err := simpleJson.Int()
+		res, err := object.Int()
 		require.Error(t, err)
 		require.Equal(t, 0, res)
 	}
 
 	{
-		res, err := simpleJson.Get("abc").String()
+		res, err := object.Get("abc").String()
 		require.Error(t, err)
 		require.Equal(t, "", res)
 	}
@@ -84,9 +84,9 @@ func TestList(t *testing.T) {
 	],
 	"ranks": ["x", "y", "z"]
 }`)
-	simpleJson, err := simplejsonx.Load(data)
+	object, err := simplejsonx.Load(data)
 	require.NoError(t, err)
-	infos, err := simpleJson.Get("infos").Array()
+	infos, err := object.Get("infos").Array()
 	require.NoError(t, err)
 	elements := simplejsonx.List(infos)
 
